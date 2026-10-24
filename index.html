@@ -1,0 +1,799 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bonjour Club</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&family=Noto+Sans+HK:wght@500;700&display=swap">
+<style>
+/* Layout: one phone-width column like a sticker notebook; sticky top bar with stars; views swap in place */
+:root{
+  --bg:#fff4f8; --dot:#ffe0eb; --ink:#4b2a4f; --muted:#8d6f92; --card:#ffffff; --line:#f4d6e2;
+  --pink:#ff6f9f; --pink-soft:#ffd6e5; --lav:#a993ff; --lav-soft:#ece6ff;
+  --mint:#4fcfae; --mint-soft:#d7f5ec; --butter:#ffcf4d; --butter-soft:#fff1c4;
+  --good:#22a77e; --bad:#ff5a73;
+  --f-display:'Fredoka','Noto Sans HK',ui-rounded,system-ui,sans-serif;
+  --f-body:'Nunito','Noto Sans HK',system-ui,sans-serif;
+  --r:22px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{min-height:100%}
+body{background:var(--bg);background-image:radial-gradient(var(--dot) 2px,transparent 2.6px);background-size:22px 22px;color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--card)}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible{outline:3px solid var(--lav);outline-offset:2px}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;margin:0;text-wrap:balance;line-height:1.2}
+p{margin:0}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:2px dashed var(--line)}
+.top-in{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;align-items:center;gap:10px}
+.brand{font-family:var(--f-display);font-weight:700;font-size:1.3rem;display:flex;align-items:center;gap:6px;margin-right:auto}
+.brand b{color:var(--pink)}
+.pill{display:flex;align-items:center;gap:5px;background:var(--butter-soft);border-radius:99px;padding:4px 12px;font-weight:800;font-variant-numeric:tabular-nums}
+.pill.streak{background:var(--pink-soft)}
+.pill.bump{animation:bump .5s}
+@keyframes bump{40%{transform:scale(1.25)}}
+
+.app{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 56px;display:grid;gap:18px}
+.view{display:grid;gap:18px}
+
+.card{background:var(--card);border-radius:var(--r);border:2px solid var(--line);padding:16px}
+.sec-title{display:flex;align-items:baseline;gap:8px;font-size:1.15rem}
+.sec-title small{font-family:var(--f-body);font-size:.8rem;color:var(--muted);font-weight:700}
+
+/* hero */
+.hero{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:center;background:linear-gradient(160deg,var(--pink-soft),var(--card) 70%)}
+.mimi{width:100%;height:auto;display:block}
+.mimi .ears{transform-origin:60px 60px;animation:wiggle 3.2s ease-in-out infinite}
+@keyframes wiggle{0%,80%,100%{transform:rotate(0)}86%{transform:rotate(-4deg)}92%{transform:rotate(4deg)}}
+.bubble{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:10px 12px;position:relative;font-weight:700;min-width:0}
+.bubble::before{content:"";position:absolute;left:-9px;top:22px;width:14px;height:14px;background:var(--card);border-left:2px solid var(--line);border-bottom:2px solid var(--line);transform:rotate(45deg)}
+.bubble .fr{font-family:var(--f-display);font-size:1.25rem;color:var(--pink);display:flex;align-items:center;gap:6px}
+.bubble .zh{font-size:.9rem;color:var(--muted)}
+.lvl{grid-column:1/-1;display:grid;gap:4px}
+.lvl-row{display:flex;justify-content:space-between;font-size:.85rem;font-weight:800}
+.lvl-row span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{height:12px;border-radius:99px;background:var(--lav-soft);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:repeating-linear-gradient(45deg,var(--lav),var(--lav) 8px,#bba8ff 8px,#bba8ff 16px);transition:width .5s}
+
+/* missions */
+.missions{display:grid;gap:10px}
+.mission{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center}
+.mission .lab{font-weight:800}
+.mission .bar{grid-column:1;height:9px;background:var(--mint-soft)}
+.mission .bar i{background:var(--mint)}
+.mission .cnt{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:99px;padding:9px 16px;font-weight:800;background:var(--pink);color:#fff;box-shadow:0 4px 0 #d94c7d;transition:transform .1s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #d94c7d}
+.btn.ghost{background:var(--card);color:var(--ink);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.btn.small{padding:5px 12px;font-size:.85rem}
+.btn[disabled]{background:var(--line);box-shadow:none;color:var(--muted);cursor:default}
+.mission .btn{grid-row:1/3;grid-column:2}
+
+/* units */
+.units{display:grid;gap:12px}
+.unit{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:12px;box-shadow:0 5px 0 var(--line);transition:transform .12s}
+.unit:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
+.unit .ic{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;font-size:2rem;font-family:var(--f-display);font-weight:700}
+.unit h3{font-size:1.15rem}
+.unit .fr{font-family:var(--f-display);color:var(--muted);font-size:.9rem}
+.unit .prog{font-size:.8rem;font-weight:800;color:var(--muted);margin-top:4px;display:grid;gap:3px}
+.unit .prog .bar{height:7px}
+.unit .go{font-family:var(--f-display);font-size:1.4rem;color:var(--pink)}
+.t-pink{background:var(--pink-soft)} .t-mint{background:var(--mint-soft)} .t-butter{background:var(--butter-soft)} .t-lav{background:var(--lav-soft)}
+.rainbow{background:conic-gradient(#ff7a7a,#ffcf4d,#6fd98a,#6fb6ff,#a993ff,#ff7aa8,#ff7a7a)}
+.rainbow span{width:30px;height:30px;border-radius:50%;background:var(--card)}
+
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.note{font-size:.88rem;background:var(--butter-soft);border-radius:16px;padding:10px 14px;font-weight:700}
+
+/* unit view */
+.vhead{display:flex;align-items:center;gap:10px}
+.back{width:42px;height:42px;border-radius:50%;background:var(--card);border:2px solid var(--line);font-size:1.2rem;font-weight:800;flex:none}
+.vhead h2{font-size:1.35rem}
+.vhead .fr{font-family:var(--f-display);color:var(--pink);font-size:.95rem}
+.switch{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:.9rem;background:var(--card);border:2px solid var(--line);border-radius:99px;padding:5px 12px 5px 6px}
+.switch .knob{width:38px;height:22px;border-radius:99px;background:var(--line);position:relative;transition:background .2s}
+.switch .knob::after{content:"";position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s}
+.switch[aria-pressed="true"] .knob{background:var(--mint)}
+.switch[aria-pressed="true"] .knob::after{left:19px}
+
+.words{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.word{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:12px;display:grid;gap:6px;justify-items:center;text-align:center;position:relative}
+.word.got{border-color:var(--mint);background:linear-gradient(var(--card),var(--mint-soft))}
+.word .w-fr{font-family:var(--f-display);font-size:1.3rem;font-weight:600;color:var(--ink);line-height:1.15}
+.word .w-zh{font-weight:800}
+.word .w-en{font-size:.8rem;color:var(--muted)}
+.word .w-tip{font-size:.78rem;color:var(--muted);background:var(--bg);border-radius:10px;padding:4px 8px;line-height:1.35}
+.word .acts{display:flex;gap:6px;margin-top:2px}
+.say{width:44px;height:44px;border-radius:50%;background:var(--pink);color:#fff;font-size:1.2rem;box-shadow:0 3px 0 #d94c7d}
+.say.playing{animation:pulse .6s}
+@keyframes pulse{50%{transform:scale(1.15)}}
+.know{border-radius:99px;padding:0 12px;height:44px;font-weight:800;font-size:.85rem;border:2px solid var(--line);background:var(--card)}
+.word.got .know{background:var(--mint);border-color:var(--mint);color:#fff}
+
+.vis{display:grid;place-items:center}
+.vis.emoji{font-size:2.2rem;line-height:1}
+.vis.num{font-family:var(--f-display);font-weight:700;font-size:2.4rem;color:var(--lav);line-height:1}
+.vis.sw{width:46px;height:46px;border-radius:50%;background:var(--c);border:3px solid var(--card);box-shadow:0 0 0 2px var(--line)}
+.vis.sm.emoji{font-size:1.7rem} .vis.sm.num{font-size:1.9rem} .vis.sm.sw{width:36px;height:36px}
+
+.games{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.gbtn{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:12px 6px;display:grid;gap:4px;justify-items:center;box-shadow:0 5px 0 var(--line);text-align:center}
+.gbtn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--line)}
+.gbtn .gi{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;font-size:1.6rem}
+.gbtn b{font-family:var(--f-display);font-weight:600;font-size:1rem}
+.gbtn small{font-size:.72rem;color:var(--muted);font-weight:700;line-height:1.3}
+
+/* game */
+.ghead{display:flex;align-items:center;gap:10px}
+.ghead h2{font-size:1.2rem;margin-right:auto}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dots i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dots i.ok{background:var(--mint)} .dots i.no{background:var(--bad)} .dots i.now{background:var(--pink);transform:scale(1.25)}
+.stage{display:grid;gap:16px}
+.prompt{display:grid;justify-items:center;gap:10px;text-align:center}
+.big-say{width:96px;height:96px;border-radius:50%;background:var(--pink);color:#fff;font-size:2.6rem;box-shadow:0 6px 0 #d94c7d}
+.big-say:active{transform:translateY(4px);box-shadow:0 2px 0 #d94c7d}
+.prompt p{font-weight:800;color:var(--muted)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px 8px;display:grid;justify-items:center;gap:6px;font-weight:800;box-shadow:0 4px 0 var(--line)}
+.opt .reveal{font-family:var(--f-display);font-weight:600;color:var(--muted);font-size:.95rem;min-height:1.4em}
+.opt.ok{border-color:var(--good);background:var(--mint-soft);box-shadow:0 4px 0 var(--good)}
+.opt.no{border-color:var(--bad);background:#ffe3e8;box-shadow:0 4px 0 var(--bad);animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mc{display:block;position:relative;width:100%;aspect-ratio:3/4;max-width:100%;perspective:600px;padding:0}
+.mc .in{position:absolute;inset:0;transition:transform .35s;transform-style:preserve-3d}
+.mc.open .in,.mc.done .in{transform:rotateY(180deg)}
+.mc .face{position:absolute;inset:0;border-radius:14px;display:grid;place-items:center;align-content:center;gap:2px;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:2px solid var(--line);padding:4px;text-align:center}
+.mc .back-f{background:var(--lav);background-image:radial-gradient(rgba(255,255,255,.45) 2px,transparent 2.5px);background-size:12px 12px;border-color:var(--lav);color:#fff;font-family:var(--f-display);font-size:1.4rem}
+.mc .front-f{background:var(--card);transform:rotateY(180deg)}
+.mc .front-f.frside{font-family:var(--f-display);font-weight:600;font-size:clamp(.78rem,3.6vw,1.05rem);line-height:1.15;color:var(--pink);word-break:break-word}
+.mc .front-f small{font-size:.72rem;font-weight:800;color:var(--ink)}
+.mc.done .front-f{border-color:var(--mint);background:var(--mint-soft)}
+.meminfo{display:flex;justify-content:space-between;font-weight:800;color:var(--muted);font-size:.9rem}
+
+.spell-q{display:grid;justify-items:center;gap:8px;text-align:center}
+.spell-q .zh{font-size:1.25rem;font-weight:800}
+.slots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;min-height:52px}
+.slot{width:42px;height:50px;border-radius:12px;border:2px dashed var(--lav);background:var(--card);font-family:var(--f-display);font-size:1.5rem;font-weight:600;display:grid;place-items:center}
+.slot.filled{border-style:solid;background:var(--lav-soft)}
+.slots.no .slot{border-color:var(--bad);animation:shake .35s}
+.slots.ok .slot{border-color:var(--good);background:var(--mint-soft)}
+.tiles{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.tile{width:46px;height:50px;border-radius:12px;background:var(--butter);font-family:var(--f-display);font-size:1.5rem;font-weight:600;box-shadow:0 4px 0 #e0a92a}
+.tile:active{transform:translateY(3px);box-shadow:0 1px 0 #e0a92a}
+.tile.used{visibility:hidden}
+
+.result{display:grid;justify-items:center;gap:12px;text-align:center;padding-block:10px}
+.result .mimi{width:130px}
+.result h2{font-size:1.6rem;color:var(--pink)}
+.result .big{font-family:var(--f-display);font-size:2.2rem;font-weight:700}
+.result .row{justify-content:center}
+
+/* stickers */
+.stickers{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+.st{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:14px 8px;display:grid;justify-items:center;gap:4px;text-align:center}
+.st .art{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:2rem;background:var(--butter-soft);border:3px dashed var(--butter)}
+.st b{font-family:var(--f-display);font-weight:600}
+.st small{font-size:.75rem;color:var(--muted);font-weight:700;line-height:1.3}
+.st.locked .art{filter:grayscale(1);opacity:.35;background:var(--bg);border-color:var(--line)}
+.st.locked b{color:var(--muted)}
+
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translate(-50%,calc(100% + 60px));visibility:hidden;background:var(--ink);color:#fff;border-radius:99px;padding:10px 18px;font-weight:800;z-index:20;transition:transform .3s,visibility .3s;max-width:calc(100% - 32px);text-align:center}
+.toast.show{transform:translate(-50%,0);visibility:visible}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:15;width:100%;height:100%}
+.foot{text-align:center;font-size:.8rem;color:var(--muted)}
+
+@media (max-width:380px){.games{grid-template-columns:1fr}.gbtn{grid-template-columns:50px 1fr;justify-items:start;text-align:left}.gbtn .gi{grid-row:1/3}.hero{grid-template-columns:86px 1fr}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">Bonjour <b>Club</b></div>
+    <div class="pill streak" id="streakPill" title="連續學習日數">🔥 <span id="streakN">1</span></div>
+    <div class="pill" id="starPill" title="星星">⭐ <span id="starN">0</span></div>
+  </div>
+</header>
+
+<main class="app">
+  <!-- HOME -->
+  <section class="view" id="v-home">
+    <div class="card hero">
+      <svg class="mimi" viewBox="0 0 120 130" aria-hidden="true" id="mimiSvg">
+        <g class="ears">
+          <ellipse cx="40" cy="34" rx="12" ry="30" fill="#fff" stroke="#4b2a4f" stroke-width="3" transform="rotate(-14 40 34)"/>
+          <ellipse cx="40" cy="38" rx="5.5" ry="19" fill="#ffc2d6" transform="rotate(-14 40 38)"/>
+          <ellipse cx="82" cy="34" rx="12" ry="30" fill="#fff" stroke="#4b2a4f" stroke-width="3" transform="rotate(14 82 34)"/>
+          <ellipse cx="82" cy="38" rx="5.5" ry="19" fill="#ffc2d6" transform="rotate(14 82 38)"/>
+        </g>
+        <circle cx="61" cy="84" r="40" fill="#fff" stroke="#4b2a4f" stroke-width="3"/>
+        <path d="M27 62 C34 38 88 34 96 60 C82 54 42 54 27 62Z" fill="#ff5c8a" stroke="#4b2a4f" stroke-width="3" stroke-linejoin="round"/>
+        <path d="M60 41 l3 -7" stroke="#4b2a4f" stroke-width="3" stroke-linecap="round"/>
+        <ellipse cx="47" cy="84" rx="4.5" ry="5.5" fill="#4b2a4f"/>
+        <ellipse cx="75" cy="84" rx="4.5" ry="5.5" fill="#4b2a4f"/>
+        <circle cx="48.5" cy="82" r="1.6" fill="#fff"/><circle cx="76.5" cy="82" r="1.6" fill="#fff"/>
+        <ellipse cx="37" cy="97" rx="7" ry="4" fill="#ffb3c9"/>
+        <ellipse cx="85" cy="97" rx="7" ry="4" fill="#ffb3c9"/>
+        <path d="M58 92 l3 3 l3 -3z" fill="#ff8fb1" stroke="#4b2a4f" stroke-width="1.5" stroke-linejoin="round"/>
+        <path d="M55 98 Q61 104 67 98" fill="none" stroke="#4b2a4f" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M44 122 h34" stroke="#4b2a4f" stroke-width="3" stroke-linecap="round"/>
+        <path d="M46 116 h30" stroke="#a993ff" stroke-width="5" stroke-linecap="round"/>
+      </svg>
+      <button class="bubble" id="bubble" aria-label="聽 Mimi 講法文">
+        <span class="fr"><span id="bubFr">Bonjour !</span> 🔊</span>
+        <span class="zh" id="bubZh">我係 Mimi，一齊學法文啦！㩒我聽發音</span>
+      </button>
+      <div class="lvl">
+        <div class="lvl-row"><span id="lvlName">Lv.1 Débutante 新手</span><span id="lvlNext">0 / 40 ⭐</span></div>
+        <div class="bar"><i id="lvlBar" style="width:0%"></i></div>
+      </div>
+    </div>
+
+    <div class="note" id="voiceNote" hidden></div>
+
+    <div class="card">
+      <h2 class="sec-title">今日任務 <small>Missions du jour · 完成有星星</small></h2>
+      <div class="missions" id="missions" style="margin-top:12px"></div>
+    </div>
+
+    <div>
+      <h2 class="sec-title" style="margin-bottom:10px">單元 <small>Les leçons</small></h2>
+      <div class="units" id="units"></div>
+    </div>
+
+    <button class="unit" id="toStickers">
+      <span class="ic t-butter">📒</span>
+      <span><h3>我嘅貼紙簿</h3><span class="fr">Mes autocollants</span><span class="prog" id="stickerProg"></span></span>
+      <span class="go">›</span>
+    </button>
+
+    <p class="foot">進度只會存喺你部機度，唔使登記，亦唔會收集你嘅資料。</p>
+  </section>
+
+  <!-- UNIT -->
+  <section class="view" id="v-unit" hidden>
+    <div class="vhead">
+      <button class="back" data-go="home" aria-label="返主頁">‹</button>
+      <div><h2 id="uTitle"></h2><div class="fr" id="uFr"></div></div>
+    </div>
+    <div class="row">
+      <button class="switch" id="slowBtn" aria-pressed="false"><span class="knob"></span>🐢 慢速發音</button>
+      <span style="font-size:.85rem;color:var(--muted);font-weight:700" id="uCount"></span>
+    </div>
+    <p class="note" id="uIntro" hidden></p>
+    <div class="words" id="words"></div>
+    <div class="card">
+      <h2 class="sec-title">玩遊戲 <small>Jouons ! · 玩完拎星星</small></h2>
+      <div class="games" style="margin-top:12px">
+        <button class="gbtn" data-game="quiz"><span class="gi t-pink">🎧</span><b>聽音揀字</b><small>聽 Mimi 講，揀啱意思</small></button>
+        <button class="gbtn" data-game="memory"><span class="gi t-mint">🃏</span><b>翻牌配對</b><small>法文配中文</small></button>
+        <button class="gbtn" data-game="spell"><span class="gi t-butter">🔤</span><b>拼字挑戰</b><small>㩒字母砌出生字</small></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAME -->
+  <section class="view" id="v-game" hidden>
+    <div class="ghead">
+      <button class="back" id="gameBack" aria-label="離開遊戲">‹</button>
+      <h2 id="gTitle"></h2>
+      <div class="pill">⭐ <span id="gStars">0</span></div>
+    </div>
+    <div class="dots" id="gDots"></div>
+    <div class="stage" id="stage"></div>
+  </section>
+
+  <!-- STICKERS -->
+  <section class="view" id="v-stickers" hidden>
+    <div class="vhead">
+      <button class="back" data-go="home" aria-label="返主頁">‹</button>
+      <div><h2>我嘅貼紙簿</h2><div class="fr">Mes autocollants</div></div>
+    </div>
+    <div class="stickers" id="stickers"></div>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+<canvas id="confetti"></canvas>
+
+<script>
+/* ---------- content ---------- */
+const GENDER_NOTE = '法文名詞分男女：le 係男性，la 係女性，母音開頭縮成 l\'，眾數用 les。記生字要連 le／la 一齊記！';
+const UNITS = [
+  { id:'sons', name:'發音入門', fr:'Les sons', kind:'emoji', tint:'t-lav', icon:'👂', intro:'法文大部分字都係「睇字就識讀」。學識呢 16 個規則，見到新字都讀得出！㩒 🔊 聽例子。', words:[
+    {fr:'ou', zh:'讀「烏」oo', en:'bonjour · rouge · souris', say:'bonjour, rouge, souris', v:'🐭', tip:'兩個字母，一個音'},
+    {fr:'oi', zh:'讀 "wa"', en:'moi · trois · noir', say:'moi, trois, noir', v:'🐦', tip:'oiseau（雀仔）都係呢個音'},
+    {fr:'au / eau', zh:'讀 "o"', en:'au revoir · gâteau · eau', say:'au revoir, gâteau, eau', v:'🍰', tip:'eau 三個字母都只係讀一個 o'},
+    {fr:'u', zh:'似廣東話「於」', en:'tu · salut · tortue', say:'tu, salut, tortue', v:'🐢', tip:'嘴圓圓，唔好讀成英文 "you"'},
+    {fr:'eu', zh:'似廣東話「靴」', en:'deux · bleu · fleur', say:'deux, bleu, fleur', v:'💙', tip:'嘴圓，舌頭向前'},
+    {fr:'é', zh:'讀 "ay"，嘴扁扁', en:'bébé · école · zéro', say:'bébé, école, zéro', v:'👶', tip:'é 上面撇向右'},
+    {fr:'è / ê', zh:'讀 "eh"，嘴開啲', en:'père · mère · crêpe', say:'père, mère, crêpe', v:'🥞', tip:'è 上面撇向左'},
+    {fr:'an / en', zh:'鼻音，似「昂」', en:'orange · enfant · blanc', say:'orange, enfant, blanc', v:'🍊', tip:'n 唔讀出，聲由鼻出'},
+    {fr:'on', zh:'鼻音，嘴圓', en:'bonjour · crayon · cochon', say:'bonjour, crayon, cochon', v:'🐷', tip:'n 唔讀出'},
+    {fr:'in', zh:'鼻音，似 "an" 但嘴扁', en:'lapin · cinq · pain', say:'lapin, cinq, pain', v:'🐰', tip:'ain 同 in 讀法一樣'},
+    {fr:'ch', zh:'讀 "sh"', en:'chat · chocolat · vache', say:'chat, chocolat, vache', v:'🐱', tip:'唔係英文 church 嘅 ch'},
+    {fr:'j / ge', zh:'似英文 measure 個 s', en:'jaune · rouge · fromage', say:'jaune, rouge, fromage', v:'🧀', tip:'g 喺 e、i 前面先咁讀'},
+    {fr:'r', zh:'喉嚨後面輕輕「咳」', en:'merci · rouge · frère', say:'merci, rouge, frère', v:'💐', tip:'唔好捲脷，似漱口嘅位置'},
+    {fr:'ç', zh:'讀 s', en:'ça va · garçon · français', say:'ça va, garçon, français', v:'💬', tip:'c 加條尾巴，就一定讀 s'},
+    {fr:'h', zh:'唔讀', en:'huit · cahier · hôtel', say:'huit, cahier, hôtel', v:'8️⃣', tip:'法文 h 永遠靜音'},
+    {fr:'-t -s -d -x', zh:'字尾通常唔讀', en:'salut · gris · canard · deux', say:'salut, gris, canard, deux', v:'🤫', tip:'例外：c r f l 字尾通常要讀（記 careful）'}
+  ]},
+  { id:'salut', name:'打招呼', fr:'Les salutations', kind:'emoji', tint:'t-pink', icon:'👋', words:[
+    {fr:'Bonjour', zh:'你好／早晨', en:'Hello', v:'☀️', tip:'on 係鼻音；j 似英文 measure 個 s'},
+    {fr:'Salut', zh:'嗨（同朋友講）', en:'Hi', v:'🙋‍♀️', tip:'尾個 t 唔讀'},
+    {fr:'Bonsoir', zh:'晚上好', en:'Good evening', v:'🌙', tip:'oir 讀 "wa"'},
+    {fr:'Bonne nuit', zh:'早唞', en:'Good night', v:'😴', tip:'nuit 似 "nwee"，t 唔讀'},
+    {fr:'Au revoir', zh:'再見', en:'Goodbye', v:'👋', tip:'au 讀 "o"；r 喺喉嚨輕輕讀'},
+    {fr:'Merci', zh:'多謝', en:'Thank you', v:'💐', tip:'r 喺喉嚨讀，唔好捲脷'},
+    {fr:"S'il vous plaît", zh:'唔該／請', en:'Please', v:'🙏', tip:'plaît 讀 "pleh"，t 唔讀'},
+    {fr:'Oui', zh:'係', en:'Yes', v:'👍', tip:'讀似英文 "we"'},
+    {fr:'Non', zh:'唔係', en:'No', v:'🙅‍♀️', tip:'鼻音，n 尾唔好讀實'},
+    {fr:'Ça va ?', zh:'你好嗎？', en:'How are you?', v:'💬', tip:'ç 有條尾巴，讀 s'},
+    {fr:'Ça va bien', zh:'我好好', en:"I'm fine", v:'😊', tip:'bien 鼻音，似 "byan"'},
+    {fr:'Enchantée', zh:'好高興識你', en:'Nice to meet you', v:'🤝', tip:'女仔寫 Enchantée，男仔寫 Enchanté，讀法一樣'},
+    {fr:"Je m'appelle…", zh:'我叫……', en:'My name is…', v:'📛', say:"Je m'appelle Mimi", tip:'je 似 "zher"；試吓講你個名！'}
+  ]},
+  { id:'nombres', name:'數字 0–10', fr:'Les nombres', kind:'num', tint:'t-butter', icon:'7', words:[
+    {fr:'zéro', zh:'零', en:'zero', v:'0', tip:'é 讀 "ay"'},
+    {fr:'un', zh:'一', en:'one', v:'1', tip:'鼻音，嘴唔使閂埋'},
+    {fr:'deux', zh:'二', en:'two', v:'2', tip:'x 唔讀，eu 嘴要圓'},
+    {fr:'trois', zh:'三', en:'three', v:'3', tip:'oi 讀 "wa"，s 唔讀'},
+    {fr:'quatre', zh:'四', en:'four', v:'4', tip:'qu 讀 k'},
+    {fr:'cinq', zh:'五', en:'five', v:'5', tip:'q 要讀出 k 音'},
+    {fr:'six', zh:'六', en:'six', v:'6', tip:'x 讀 s，似 "seess"'},
+    {fr:'sept', zh:'七', en:'seven', v:'7', tip:'p 唔讀，讀 "set"'},
+    {fr:'huit', zh:'八', en:'eight', v:'8', tip:'h 唔讀，似 "weet"'},
+    {fr:'neuf', zh:'九', en:'nine', v:'9', tip:'f 要讀；同「新」嘅 neuf 一樣寫法'},
+    {fr:'dix', zh:'十', en:'ten', v:'10', tip:'x 讀 s，似 "deess"'}
+  ]},
+  { id:'couleurs', name:'顏色', fr:'Les couleurs', kind:'color', tint:'rainbow', icon:'', words:[
+    {fr:'rouge', zh:'紅色', en:'red', v:'#ef4444', tip:'r 喉音；ge 似 measure 個 s'},
+    {fr:'rose', zh:'粉紅色', en:'pink', v:'#ff9cc2', tip:'s 讀 z'},
+    {fr:'orange', zh:'橙色', en:'orange', v:'#fb923c', tip:'an 係鼻音'},
+    {fr:'jaune', zh:'黃色', en:'yellow', v:'#facc15', tip:'j 似 measure 個 s'},
+    {fr:'vert', zh:'綠色', en:'green', v:'#22c55e', tip:'rt 都唔讀，似 "vair"'},
+    {fr:'bleu', zh:'藍色', en:'blue', v:'#3b82f6', tip:'eu 嘴要圓'},
+    {fr:'violet', zh:'紫色', en:'purple', v:'#a78bfa', tip:'t 唔讀，似 "vyo-lay"'},
+    {fr:'marron', zh:'啡色', en:'brown', v:'#92400e', tip:'on 鼻音'},
+    {fr:'noir', zh:'黑色', en:'black', v:'#262626', tip:'oir 讀 "wa"'},
+    {fr:'blanc', zh:'白色', en:'white', v:'#ffffff', tip:'c 唔讀，鼻音'},
+    {fr:'gris', zh:'灰色', en:'grey', v:'#9ca3af', tip:'s 唔讀'}
+  ]},
+  { id:'famille', name:'家庭', fr:'La famille', kind:'emoji', tint:'t-lav', icon:'👨‍👩‍👧', intro:GENDER_NOTE, words:[
+    {fr:'la famille', sp:'famille', zh:'家庭', en:'family', v:'👨‍👩‍👧', tip:'ille 讀 "ee-y"'},
+    {fr:'le père', sp:'père', zh:'爸爸', en:'father', v:'👨', tip:'è 讀 "eh"'},
+    {fr:'la mère', sp:'mère', zh:'媽媽', en:'mother', v:'👩', tip:'同 père 押韻'},
+    {fr:'le frère', sp:'frère', zh:'哥哥／細佬', en:'brother', v:'👦', tip:'r 喺喉嚨讀'},
+    {fr:'la sœur', sp:'sœur', zh:'家姐／妹妹', en:'sister', v:'👧', tip:'œ 係 o 同 e 黐埋，嘴要圓'},
+    {fr:'le grand-père', zh:'爺爺／公公', en:'grandfather', v:'👴', tip:'grand 個 d 唔讀'},
+    {fr:'la grand-mère', zh:'嫲嫲／婆婆', en:'grandmother', v:'👵', tip:'grand 個 d 唔讀'},
+    {fr:'le bébé', sp:'bébé', zh:'BB', en:'baby', v:'👶', tip:'é 讀 "ay"'},
+    {fr:"l'oncle", sp:'oncle', zh:'叔叔／舅父', en:'uncle', v:'🧔', tip:"母音開頭，le 縮成 l'"},
+    {fr:'la tante', sp:'tante', zh:'姑媽／阿姨', en:'aunt', v:'👱‍♀️', tip:'an 鼻音'},
+    {fr:'le cousin', sp:'cousin', zh:'表哥／堂弟（男）', en:'cousin (boy)', v:'🧑', tip:'in 鼻音，n 唔讀實'},
+    {fr:'la cousine', sp:'cousine', zh:'表姐／堂妹（女）', en:'cousin (girl)', v:'👩‍🦰', tip:'加 e 變女仔，n 要讀出'}
+  ]},
+  { id:'nourriture', name:'食物', fr:'La nourriture', kind:'emoji', tint:'t-butter', icon:'🥐', intro:GENDER_NOTE, words:[
+    {fr:'le croissant', sp:'croissant', zh:'牛角包', en:'croissant', v:'🥐', tip:'t 唔讀'},
+    {fr:'le pain', sp:'pain', zh:'麵包', en:'bread', v:'🍞', tip:'ain 鼻音'},
+    {fr:'le fromage', sp:'fromage', zh:'芝士', en:'cheese', v:'🧀', tip:'ge 似 measure 個 s'},
+    {fr:'la crêpe', sp:'crêpe', zh:'法式薄餅', en:'crêpe', v:'🥞', tip:'ê 讀 "eh"'},
+    {fr:'le gâteau', sp:'gâteau', zh:'蛋糕', en:'cake', v:'🍰', tip:'eau 讀 "o"'},
+    {fr:'le chocolat', sp:'chocolat', zh:'朱古力', en:'chocolate', v:'🍫', tip:'ch 讀 sh，t 唔讀'},
+    {fr:'la glace', sp:'glace', zh:'雪糕', en:'ice cream', v:'🍦', tip:'ce 讀 s'},
+    {fr:'la pomme', sp:'pomme', zh:'蘋果', en:'apple', v:'🍎', tip:'似 "pom"'},
+    {fr:'la fraise', sp:'fraise', zh:'士多啤梨', en:'strawberry', v:'🍓', tip:'s 喺兩個母音中間讀 z'},
+    {fr:'la banane', sp:'banane', zh:'香蕉', en:'banana', v:'🍌', tip:'似 "ba-nan"'},
+    {fr:'le lait', sp:'lait', zh:'牛奶', en:'milk', v:'🥛', tip:'t 唔讀，似 "leh"'},
+    {fr:"l'eau", sp:'eau', zh:'水', en:'water', v:'💧', tip:'eau 讀 "o"，三個字母一個音'}
+  ]},
+  { id:'ecole', name:'學校', fr:"L'école", kind:'emoji', tint:'t-mint', icon:'🎒', intro:GENDER_NOTE, words:[
+    {fr:"l'école", sp:'école', zh:'學校', en:'school', v:'🏫', tip:'é 讀 "ay"'},
+    {fr:'le sac', sp:'sac', zh:'書包', en:'school bag', v:'🎒', tip:'c 要讀'},
+    {fr:'le livre', sp:'livre', zh:'書', en:'book', v:'📕', tip:'似 "leev-r"'},
+    {fr:'le cahier', sp:'cahier', zh:'簿', en:'exercise book', v:'📒', tip:'h 唔讀，ier 讀 "yay"'},
+    {fr:'le stylo', sp:'stylo', zh:'原子筆', en:'pen', v:'🖊️', tip:'y 讀 "ee"'},
+    {fr:'le crayon', sp:'crayon', zh:'鉛筆', en:'pencil', v:'✏️', tip:'on 鼻音'},
+    {fr:'la gomme', sp:'gomme', zh:'擦膠', en:'eraser', v:'🧽', tip:'似 "gom"'},
+    {fr:'la règle', sp:'règle', zh:'間尺', en:'ruler', v:'📏', tip:'è 讀 "eh"'},
+    {fr:'la trousse', sp:'trousse', zh:'筆袋', en:'pencil case', v:'👝', tip:'ou 讀 "oo"，ss 讀 s'},
+    {fr:'les ciseaux', sp:'ciseaux', zh:'較剪', en:'scissors', v:'✂️', tip:'les = 眾數；尾個 x 唔讀'},
+    {fr:'le professeur', sp:'professeur', zh:'老師', en:'teacher', v:'👩‍🏫', tip:'口語可以講 le prof'},
+    {fr:"l'élève", sp:'élève', zh:'學生', en:'student', v:'🧑‍🎓', tip:'男女都寫 élève'}
+  ]},
+  { id:'animaux', name:'動物', fr:'Les animaux', kind:'emoji', tint:'t-pink', icon:'🐰', intro:GENDER_NOTE, words:[
+    {fr:'le lapin', sp:'lapin', zh:'兔仔', en:'rabbit', v:'🐰', tip:'Mimi 就係 un lapin！in 鼻音'},
+    {fr:'le chat', sp:'chat', zh:'貓', en:'cat', v:'🐱', tip:'ch 讀 sh，t 唔讀，似 "sha"'},
+    {fr:'le chien', sp:'chien', zh:'狗', en:'dog', v:'🐶', tip:'ien 鼻音，似 "shyan"'},
+    {fr:"l'oiseau", sp:'oiseau', zh:'雀仔', en:'bird', v:'🐦', tip:'oi 讀 "wa"，eau 讀 "o"'},
+    {fr:'le poisson', sp:'poisson', zh:'魚', en:'fish', v:'🐟', tip:'ss 讀 s；一個 s 就變 poison（毒藥）！'},
+    {fr:'la souris', sp:'souris', zh:'老鼠', en:'mouse', v:'🐭', tip:'尾個 s 唔讀'},
+    {fr:'le cheval', sp:'cheval', zh:'馬', en:'horse', v:'🐴', tip:'ch 讀 sh'},
+    {fr:'la vache', sp:'vache', zh:'牛', en:'cow', v:'🐮', tip:'ch 讀 sh'},
+    {fr:'le cochon', sp:'cochon', zh:'豬', en:'pig', v:'🐷', tip:'on 鼻音'},
+    {fr:'le canard', sp:'canard', zh:'鴨', en:'duck', v:'🦆', tip:'d 唔讀'},
+    {fr:'la tortue', sp:'tortue', zh:'烏龜', en:'turtle', v:'🐢', tip:'u 嘴圓圓讀 "ee"'},
+    {fr:'le panda', sp:'panda', zh:'熊貓', en:'panda', v:'🐼', tip:'an 鼻音'}
+  ]}
+];
+const BUBBLES = [
+  ['Bonjour !','我係 Mimi，一齊學法文啦！㩒我聽發音'],
+  ['Tu es super !','你好叻呀！'],
+  ['On joue ?','一齊玩遊戲？'],
+  ['J’adore le français !','我好鍾意法文！'],
+  ['Bravo !','做得好！']
+];
+const MISSIONS = [
+  {id:'listen', label:'聽 10 次發音', goal:10, reward:5},
+  {id:'game', label:'玩完 1 個遊戲', goal:1, reward:5},
+  {id:'perfect', label:'一個遊戲拎滿分', goal:1, reward:10}
+];
+const BADGES = [
+  {id:'first_listen', art:'🎧', name:'第一聲 Bonjour', desc:'第一次聽發音'},
+  {id:'unit_sons', art:'👂', name:'小耳朵', desc:'學識晒 16 個發音規則'},
+  {id:'unit_salut', art:'💬', name:'打招呼小達人', desc:'學識晒「打招呼」'},
+  {id:'unit_nombres', art:'🔢', name:'數字小精靈', desc:'學識晒 0 至 10'},
+  {id:'unit_couleurs', art:'🎨', name:'彩虹畫家', desc:'學識晒全部顏色'},
+  {id:'unit_famille', art:'👨‍👩‍👧', name:'家庭小天使', desc:'學識晒「家庭」'},
+  {id:'unit_nourriture', art:'🥐', name:'小小美食家', desc:'學識晒「食物」'},
+  {id:'unit_ecole', art:'🎒', name:'模範學生', desc:'學識晒「學校」'},
+  {id:'unit_animaux', art:'🐰', name:'動物好朋友', desc:'學識晒「動物」'},
+  {id:'perfect', art:'🌟', name:'滿分之星', desc:'一個遊戲拎滿分'},
+  {id:'memory', art:'👑', name:'記憶公主', desc:'翻牌 10 步內完成'},
+  {id:'stars50', art:'⭐', name:'星星收藏家', desc:'儲夠 50 粒星'},
+  {id:'streak3', art:'🔥', name:'三日不斷', desc:'連續 3 日學法文'}
+];
+const LEVELS = [['Débutante','新手'],['Petite étoile','小星星'],['Petite fleur','小花'],['Papillon','蝴蝶'],['Princesse du français','法文公主']];
+const PER_LEVEL = 40;
+
+/* ---------- state ---------- */
+const KEY = 'bonjourclub.v1';
+const $ = id => document.getElementById(id);
+function load(){
+  const d = {stars:0, learned:{}, everLearned:{}, badges:{}, listens:0, streak:0, lastDay:'', daily:null, slow:false};
+  try { const raw = localStorage.getItem(KEY); if (raw) Object.assign(d, JSON.parse(raw)); } catch(e){}
+  return d;
+}
+let S = load();
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+function dayStr(t){ const d = new Date(t); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function ensureDay(){
+  const t = dayStr(Date.now());
+  if (!S.daily || S.daily.date !== t) S.daily = {date:t, listen:0, game:0, perfect:0, claimed:{}};
+  if (S.lastDay !== t){
+    S.streak = (S.lastDay === dayStr(Date.now()-864e5)) ? S.streak + 1 : 1;
+    S.lastDay = t;
+  }
+  if (S.streak >= 3) giveBadge('streak3');
+  save();
+}
+
+/* ---------- helpers ---------- */
+const shuffle = a => { a = a.slice(); for (let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const sayText = w => w.say || w.fr.replace('…','');
+const spellWord = w => w.sp || w.fr;
+function visual(unit, w, size){
+  const s = size ? ' '+size : '';
+  if (unit.kind === 'num') return `<span class="vis num${s}">${w.v}</span>`;
+  if (unit.kind === 'color') return `<span class="vis sw${s}" style="--c:${w.v}"></span>`;
+  return `<span class="vis emoji${s}">${w.v}</span>`;
+}
+let toastT;
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'), 2200); }
+
+/* ---------- speech ---------- */
+let frVoice = null, voicesLoaded = false;
+const hasTTS = 'speechSynthesis' in window;
+function pickVoice(){
+  if (!hasTTS) return renderVoiceNote();
+  const vs = speechSynthesis.getVoices();
+  if (vs.length) voicesLoaded = true;
+  const fr = vs.filter(v => /^fr/i.test(v.lang));
+  const frFR = fr.filter(v => /fr[-_]FR/i.test(v.lang));
+  frVoice = frFR.find(v => /Google|Amélie|Amelie|Audrey|Marie|Denise|Julie|Thomas/i.test(v.name)) || frFR[0] || fr[0] || null;
+  renderVoiceNote();
+}
+function renderVoiceNote(){
+  const n = $('voiceNote');
+  if (!hasTTS){ n.hidden=false; n.textContent='呢個瀏覽器出唔到聲。試吓用 Chrome 或者 iPhone 嘅 Safari。'; return; }
+  if (voicesLoaded && !frVoice){ n.hidden=false; n.textContent='你部機未裝法文語音，發音可能唔準。Android 可以去「設定 › 文字轉語音」加法文；iPhone 去「設定 › 輔助使用 › 語音內容 › 聲音」。'; return; }
+  n.hidden = true;
+}
+function speak(text, btn){
+  if (!hasTTS){ toast('呢個瀏覽器出唔到聲'); return; }
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'fr-FR'; if (frVoice) u.voice = frVoice;
+  u.rate = S.slow ? 0.6 : 0.9; u.pitch = 1.1;
+  speechSynthesis.speak(u);
+  if (btn){ btn.classList.remove('playing'); void btn.offsetWidth; btn.classList.add('playing'); }
+  S.listens++; S.daily.listen++;
+  giveBadge('first_listen');
+  save(); renderTop(); if (!$('v-home').hidden) renderMissions();
+}
+if (hasTTS){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; setTimeout(()=>{ voicesLoaded = true; pickVoice(); }, 2500); }
+else renderVoiceNote();
+
+/* ---------- rewards ---------- */
+function addStars(n){
+  S.stars += n; save();
+  const p=$('starPill'); p.classList.remove('bump'); void p.offsetWidth; p.classList.add('bump');
+  if (S.stars >= 50) giveBadge('stars50');
+  renderTop();
+}
+function giveBadge(id){
+  if (S.badges[id]) return;
+  S.badges[id] = Date.now(); save();
+  const b = BADGES.find(x=>x.id===id);
+  setTimeout(()=>toast('新貼紙！'+b.art+' '+b.name), 300);
+}
+
+/* ---------- render: top + home ---------- */
+function renderTop(){
+  $('starN').textContent = S.stars; $('streakN').textContent = S.streak;
+  const li = Math.min(Math.floor(S.stars/PER_LEVEL), LEVELS.length-1);
+  const [fr, zh] = LEVELS[li];
+  $('lvlName').textContent = `Lv.${li+1} ${fr} ${zh}`;
+  if (li === LEVELS.length-1){ $('lvlNext').textContent = '最高級！'; $('lvlBar').style.width='100%'; }
+  else { const inLv = S.stars - li*PER_LEVEL; $('lvlNext').textContent = `${inLv} / ${PER_LEVEL} ⭐`; $('lvlBar').style.width = (inLv/PER_LEVEL*100)+'%'; }
+}
+function renderMissions(){
+  $('missions').innerHTML = MISSIONS.map(m=>{
+    const v = Math.min(S.daily[m.id], m.goal), done = v >= m.goal, claimed = S.daily.claimed[m.id];
+    const btn = claimed ? `<button class="btn small" disabled>已領取</button>`
+      : done ? `<button class="btn small" data-claim="${m.id}">領 ${m.reward} ⭐</button>`
+      : `<button class="btn small ghost" disabled>+${m.reward} ⭐</button>`;
+    return `<div class="mission"><span class="lab">${m.label}</span>${btn}<div class="bar"><i style="width:${v/m.goal*100}%"></i></div><span class="cnt">${v} / ${m.goal}</span></div>`;
+  }).join('');
+}
+function unitLearned(u){ return u.words.filter(w=>S.learned[w.fr]).length; }
+function renderUnits(){
+  $('units').innerHTML = UNITS.map((u,i)=>{
+    const n = unitLearned(u), t = u.words.length;
+    const ic = u.kind==='color' ? `<span class="ic rainbow"><span></span></span>` : `<span class="ic ${u.tint}">${u.icon}</span>`;
+    return `<button class="unit" data-unit="${i}">${ic}<span><h3>${u.name}</h3><span class="fr">${u.fr}</span>
+      <span class="prog">識咗 ${n} / ${t} 個字<span class="bar"><i style="width:${n/t*100}%"></i></span></span></span><span class="go">›</span></button>`;
+  }).join('');
+  const got = BADGES.filter(b=>S.badges[b.id]).length;
+  $('stickerProg').textContent = `儲咗 ${got} / ${BADGES.length} 張貼紙`;
+}
+let bubI = 0;
+$('bubble').addEventListener('click', ()=>{
+  speak(BUBBLES[bubI][0].replace('’',"'"));
+  bubI = (bubI+1) % BUBBLES.length;
+  setTimeout(()=>{ $('bubFr').textContent = BUBBLES[bubI][0]; $('bubZh').textContent = BUBBLES[bubI][1]; }, 900);
+});
+$('missions').addEventListener('click', e=>{
+  const id = e.target.closest('[data-claim]')?.dataset.claim; if (!id) return;
+  const m = MISSIONS.find(x=>x.id===id);
+  S.daily.claimed[id] = true; addStars(m.reward); renderMissions(); burst();
+});
+$('units').addEventListener('click', e=>{
+  const b = e.target.closest('[data-unit]'); if (b) openUnit(+b.dataset.unit);
+});
+$('toStickers').addEventListener('click', ()=>{ renderStickers(); show('stickers'); });
+document.querySelectorAll('[data-go="home"]').forEach(b=>b.addEventListener('click', ()=>goHome()));
+
+/* ---------- views ---------- */
+function show(name){
+  ['home','unit','game','stickers'].forEach(v=>$('v-'+v).hidden = v!==name);
+  window.scrollTo(0,0);
+}
+function goHome(){ renderTop(); renderMissions(); renderUnits(); show('home'); }
+
+/* ---------- unit ---------- */
+let curUnit = null;
+function openUnit(i){
+  curUnit = UNITS[i];
+  $('uTitle').textContent = curUnit.name; $('uFr').textContent = curUnit.fr;
+  $('uIntro').hidden = !curUnit.intro; $('uIntro').textContent = curUnit.intro || '';
+  renderWords(); show('unit');
+}
+function renderWords(){
+  const u = curUnit;
+  $('slowBtn').setAttribute('aria-pressed', S.slow ? 'true' : 'false');
+  $('uCount').textContent = `識咗 ${unitLearned(u)} / ${u.words.length}`;
+  $('words').innerHTML = u.words.map((w,k)=>`<div class="word${S.learned[w.fr]?' got':''}">
+      ${visual(u,w)}<span class="w-fr" lang="fr">${w.fr}</span><span class="w-zh">${w.zh}</span><span class="w-en">${w.en}</span>
+      <span class="w-tip">${w.tip}</span>
+      <span class="acts"><button class="say" data-say="${k}" aria-label="聽發音">🔊</button><button class="know" data-know="${k}">${S.learned[w.fr]?'識咗 ✓':'我識喇'}</button></span>
+    </div>`).join('');
+}
+$('words').addEventListener('click', e=>{
+  const s = e.target.closest('[data-say]'), k = e.target.closest('[data-know]');
+  if (s){ speak(sayText(curUnit.words[+s.dataset.say]), s); return; }
+  if (k){
+    const w = curUnit.words[+k.dataset.know];
+    if (S.learned[w.fr]) delete S.learned[w.fr];
+    else {
+      S.learned[w.fr] = true;
+      if (!S.everLearned[w.fr]){ S.everLearned[w.fr] = true; addStars(1); }
+      if (unitLearned(curUnit) === curUnit.words.length && !S.badges['unit_'+curUnit.id]){ giveBadge('unit_'+curUnit.id); addStars(5); burst(); }
+    }
+    save(); renderWords();
+  }
+});
+$('slowBtn').addEventListener('click', ()=>{ S.slow = !S.slow; save(); $('slowBtn').setAttribute('aria-pressed', S.slow?'true':'false'); toast(S.slow ? '慢速發音：開' : '慢速發音：關'); });
+document.querySelector('.games').addEventListener('click', e=>{
+  const g = e.target.closest('[data-game]')?.dataset.game; if (!g) return;
+  ({quiz:startQuiz, memory:startMemory, spell:startSpell})[g](curUnit);
+});
+
+/* ---------- game shell ---------- */
+let G = null;
+function gameStart(title, total){
+  $('gTitle').textContent = title; G.got = 0; G.marks = [];
+  $('gStars').textContent = 0; renderDots(total); show('game');
+}
+function renderDots(total){
+  if (!total){ $('gDots').innerHTML=''; return; }
+  $('gDots').innerHTML = Array.from({length:total},(_,i)=>`<i class="${G.marks[i]||(i===G.i?'now':'')}"></i>`).join('');
+}
+function gameStar(){ G.got++; $('gStars').textContent = G.got; addStars(1); }
+$('gameBack').addEventListener('click', ()=>{ if (hasTTS) speechSynthesis.cancel(); G = null; openUnit(UNITS.indexOf(curUnit)); });
+function finishGame(perfect, line){
+  S.daily.game++;
+  let bonus = 0;
+  if (perfect){ S.daily.perfect++; giveBadge('perfect'); bonus = 3; addStars(bonus); burst(); }
+  save();
+  const head = perfect ? 'Parfait ! 滿分！' : (G.got >= (G.total||1)/2 ? 'Bravo ! 好叻！' : 'Courage ! 加油！');
+  $('gDots').innerHTML = '';
+  $('stage').innerHTML = `<div class="card result">
+      ${$('mimiSvg').outerHTML.replace('id="mimiSvg"','')}
+      <h2>${head}</h2>
+      <p class="big">⭐ +${G.got + bonus}</p>
+      <p style="font-weight:700;color:var(--muted)">${line}${perfect?'<br>滿分額外送 3 粒星！':''}</p>
+      <div class="row"><button class="btn" id="again">再玩一次</button><button class="btn ghost" id="toUnit">返單元</button></div>
+    </div>`;
+  const kind = G.type;
+  speak(perfect ? 'Parfait !' : 'Bravo !');
+  $('again').onclick = ()=>({quiz:startQuiz, memory:startMemory, spell:startSpell})[kind](curUnit);
+  $('toUnit').onclick = ()=>{ G=null; openUnit(UNITS.indexOf(curUnit)); };
+}
+
+/* ---------- game 1: listen & pick ---------- */
+function startQuiz(u){
+  G = {type:'quiz', qs:shuffle(u.words).slice(0,8), i:0, lock:false};
+  G.total = G.qs.length;
+  gameStart('聽音揀字', G.total); renderQuiz();
+}
+function renderQuiz(){
+  const q = G.qs[G.i];
+  G.opts = shuffle([q, ...shuffle(curUnit.words.filter(w=>w!==q)).slice(0,3)]);
+  G.lock = false; renderDots(G.total);
+  $('stage').innerHTML = `<div class="prompt"><button class="big-say" id="replay" aria-label="再聽一次">🔊</button><p>第 ${G.i+1} 題：Mimi 講緊咩？㩒喇叭可以再聽</p></div>
+    <div class="opts">${G.opts.map((w,k)=>`<button class="opt" data-opt="${k}">${visual(curUnit,w,'sm')}<span>${w.zh}</span><span class="reveal" lang="fr"></span></button>`).join('')}</div>`;
+  $('replay').onclick = ()=>speak(sayText(q));
+  setTimeout(()=>{ if (G && G.type==='quiz') speak(sayText(q)); }, 350);
+}
+$('stage').addEventListener('click', e=>{
+  if (!G) return;
+  if (G.type==='quiz'){
+    const b = e.target.closest('[data-opt]'); if (!b || G.lock) return;
+    G.lock = true;
+    const q = G.qs[G.i], pick = G.opts[+b.dataset.opt], ok = pick === q;
+    document.querySelectorAll('.opt').forEach((el,k)=>{ el.querySelector('.reveal').textContent = G.opts[k].fr; if (G.opts[k]===q) el.classList.add('ok'); });
+    if (ok) gameStar(); else b.classList.add('no');
+    G.marks[G.i] = ok ? 'ok' : 'no';
+    setTimeout(()=>{ if (!G || G.type!=='quiz') return; G.i++; if (G.i < G.total) renderQuiz(); else finishGame(G.got===G.total, `答啱 ${G.got} / ${G.total} 題`); }, ok ? 900 : 1600);
+  }
+  else if (G.type==='memory') memClick(e);
+  else if (G.type==='spell') spellClick(e);
+});
+
+/* ---------- game 2: memory ---------- */
+function startMemory(u){
+  const ws = shuffle(u.words).slice(0,6);
+  G = {type:'memory', cards:shuffle(ws.flatMap(w=>[{w,side:'fr'},{w,side:'pic'}])), open:[], moves:0, pairs:0, total:0};
+  gameStart('翻牌配對', 0); renderMemory();
+}
+function renderMemory(){
+  $('stage').innerHTML = `<div class="meminfo"><span>將法文同意思配對</span><span id="memMoves">翻咗 0 次</span></div>
+    <div class="mem">${G.cards.map((c,k)=>`<button class="mc" data-mc="${k}" aria-label="卡 ${k+1}"><span class="in">
+      <span class="face back-f">?</span>
+      ${c.side==='fr' ? `<span class="face front-f frside" lang="fr">${c.w.fr}</span>` : `<span class="face front-f">${visual(curUnit,c.w,'sm')}<small>${c.w.zh}</small></span>`}
+    </span></button>`).join('')}</div>`;
+}
+function memClick(e){
+  const b = e.target.closest('[data-mc]'); if (!b) return;
+  const k = +b.dataset.mc, c = G.cards[k];
+  if (G.open.length===2 || c.done || G.open.includes(k)) return;
+  b.classList.add('open'); G.open.push(k);
+  if (c.side==='fr') speak(sayText(c.w));
+  if (G.open.length===2){
+    G.moves++; $('memMoves').textContent = `翻咗 ${G.moves} 次`;
+    const [a,z] = G.open.map(i=>G.cards[i]);
+    const els = G.open.map(i=>document.querySelector(`[data-mc="${i}"]`));
+    if (a.w === z.w){
+      a.done = z.done = true; G.pairs++;
+      setTimeout(()=>{ els.forEach(el=>el.classList.add('done')); G.open = []; gameStar(); if (a.side!=='fr') speak(sayText(a.w));
+        if (G.pairs===6){ const p = G.moves <= 8; if (G.moves<=10) giveBadge('memory'); G.total = 6; setTimeout(()=>finishGame(p, `用咗 ${G.moves} 步完成（8 步內算滿分）`), 700); } }, 450);
+    } else setTimeout(()=>{ els.forEach(el=>el.classList.remove('open')); G.open = []; }, 1000);
+  }
+}
+
+/* ---------- game 3: spelling ---------- */
+function startSpell(u){
+  const pool = u.words.filter(w=>/^[a-zàâçéèêëîïôûùüœ]+$/i.test(spellWord(w)) && spellWord(w).length>=2 && spellWord(w).length<=9);
+  G = {type:'spell', qs:shuffle(pool).slice(0,5), i:0, miss:0};
+  G.total = G.qs.length;
+  gameStart('拼字挑戰', G.total); renderSpell();
+}
+function renderSpell(){
+  const q = G.qs[G.i], word = spellWord(q).toLowerCase();
+  const decoys = shuffle('aeiourlnst'.split('').filter(ch=>!word.includes(ch))).slice(0,2);
+  G.target = word; G.tiles = shuffle([...word, ...decoys]); G.picked = []; G.tryMiss = false;
+  renderDots(G.total);
+  $('stage').innerHTML = `<div class="card spell-q">${visual(curUnit,q)}<span class="zh">${q.zh}</span>${q.sp ? `<span style="font-family:var(--f-display);color:var(--pink);font-size:1.1rem" lang="fr">${q.fr.replace(q.sp,'＿＿')}</span>` : ''}
+      <button class="btn ghost small" id="spellHear">🔊 聽發音</button><span style="font-size:.85rem;color:var(--muted);font-weight:700">${word.length} 個字母 · 㩒格仔可以退返</span></div>
+    <div class="slots" id="slots"></div><div class="tiles" id="tiles"></div>`;
+  $('spellHear').onclick = ()=>speak(sayText(q));
+  drawSpell();
+  setTimeout(()=>{ if (G && G.type==='spell') speak(sayText(q)); }, 350);
+}
+function drawSpell(){
+  $('slots').innerHTML = [...G.target].map((_,i)=>{ const t = G.picked[i]; return `<button class="slot${t!==undefined?' filled':''}" data-slot="${i}">${t!==undefined?G.tiles[t]:''}</button>`; }).join('');
+  $('tiles').innerHTML = G.tiles.map((ch,i)=>`<button class="tile${G.picked.includes(i)?' used':''}" data-tile="${i}">${ch}</button>`).join('');
+}
+function spellClick(e){
+  const t = e.target.closest('[data-tile]'), s = e.target.closest('[data-slot]');
+  if (G.lock) return;
+  if (s){ const i = +s.dataset.slot; if (G.picked[i]!==undefined){ G.picked.splice(i); drawSpell(); } return; }
+  if (!t) return;
+  const ti = +t.dataset.tile; if (G.picked.includes(ti)) return;
+  G.picked.push(ti); drawSpell();
+  if (G.picked.length === G.target.length){
+    const ans = G.picked.map(i=>G.tiles[i]).join('');
+    if (ans === G.target){
+      G.lock = true; $('slots').classList.add('ok'); gameStar(); speak(sayText(G.qs[G.i]));
+      G.marks[G.i] = G.tryMiss ? 'no' : 'ok';
+      setTimeout(()=>{ if (!G || G.type!=='spell') return; G.lock=false; G.i++; if (G.i < G.total) renderSpell(); else finishGame(G.miss===0, `拼啱 ${G.total} 個字，錯咗 ${G.miss} 次`); }, 1100);
+    } else {
+      G.lock = true; G.miss++; G.tryMiss = true; $('slots').classList.add('no');
+      setTimeout(()=>{ G.lock=false; G.picked=[]; $('slots').classList.remove('no'); drawSpell(); }, 700);
+    }
+  }
+}
+
+/* ---------- stickers ---------- */
+function renderStickers(){
+  $('stickers').innerHTML = BADGES.map(b=>`<div class="st${S.badges[b.id]?'':' locked'}"><span class="art">${b.art}</span><b>${b.name}</b><small>${S.badges[b.id]?'已獲得 ✓':b.desc}</small></div>`).join('');
+}
+
+/* ---------- confetti ---------- */
+function burst(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cv = $('confetti'), cx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight;
+  const cols = ['#ff6f9f','#a993ff','#4fcfae','#ffcf4d','#ffb3c9'];
+  const ps = Array.from({length:70},()=>({x:innerWidth/2, y:innerHeight*0.35, vx:(Math.random()-.5)*9, vy:-Math.random()*9-3, r:Math.random()*5+4, c:cols[Math.random()*5|0], a:Math.random()*6, heart:Math.random()<.35}));
+  let f = 0;
+  (function tick(){
+    cx.clearRect(0,0,cv.width,cv.height);
+    ps.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=.28; p.a+=.1; cx.save(); cx.translate(p.x,p.y); cx.rotate(p.a); cx.fillStyle=p.c;
+      if (p.heart){ cx.font = (p.r*3)+'px sans-serif'; cx.fillText('♥',-p.r,p.r); } else cx.fillRect(-p.r/2,-p.r/2,p.r,p.r*1.6);
+      cx.restore(); });
+    if (++f < 110) requestAnimationFrame(tick); else cx.clearRect(0,0,cv.width,cv.height);
+  })();
+}
+
+/* ---------- boot ---------- */
+ensureDay();
+goHome();
+</script>
+
+</body>
+</html>
